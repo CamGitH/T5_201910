@@ -1,4 +1,4 @@
-package colas;
+package model.data_structures;
 
 /*
  *Clase del nodo

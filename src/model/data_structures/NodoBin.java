@@ -1,13 +1,8 @@
 package model.data_structures;
+
 import java.io.Serializable;
 
-/**
- * Nodo de la cola encadenada
- * @param <T> Tipo de elemento con el cual se le dará la prioridad al nodo de la cola
- * @param <E> Tipo de elemento que va a contener cada nodo de la cola
- */
-public class NodoColaPrioridad<T extends Comparable<? super T>> implements Serializable
-{
+public class NodoBin <T> {
 	// -----------------------------------------------------------------
 	// Constantes
 	// -----------------------------------------------------------------
@@ -29,9 +24,13 @@ public class NodoColaPrioridad<T extends Comparable<? super T>> implements Seria
 	 * Elemento que le dara la prioridad al nodo de la cola
 	 */
 	/**
-	 * Siguiente elemento encadenado
+	 * Siguiente elemento encadenado izquierda
 	 */
-	private NodoColaPrioridad<T> sigNodo;
+	private NodoBin<T> hijoIzq;
+	/**
+	 * Siguiente elemento encadenado derecha
+	 */
+	private NodoBin<T> hijoDer;
 
 	// -----------------------------------------------------------------
 	// Constructores
@@ -43,10 +42,11 @@ public class NodoColaPrioridad<T extends Comparable<? super T>> implements Seria
 	 * @param pPrioridad Elemento que le da la prioridad al nodo de la cola. Diferente de null.<br>
 	 * @param pElemento Elemento que va a ser almacenado en el nodo. Diferente de null<br>
 	 */
-	public NodoColaPrioridad(T pElemento )
-	{
+	public NodoBin(T pElemento) {
+	
 		elemento = pElemento;
-		sigNodo = null;
+		hijoIzq = null;
+		hijoDer = null;
 	}
 
 	// -----------------------------------------------------------------
@@ -63,41 +63,43 @@ public class NodoColaPrioridad<T extends Comparable<? super T>> implements Seria
 		return elemento;
 	}
 
-	
-
-	/**
-	 * Desconecta el nodo de la cola suponiendo que es el primero. <br>
-	 * <b>pre: </b> El nodo actual es el primer nodo de la cola. <br>
-	 * <b>post: </b> Se retornó el nodo con el cual comienza la cola ahora, sigNodo=null.<br>
-	 * @return Nodo con el cual comienza la cola ahora.<br>
-	 */
-	public NodoColaPrioridad<T> desconectarPrimero( )
+	 /*
+	  * da el hijo de la derecha y lo borra
+	  */
+	public NodoBin<T> darDer( )
 	{
-		NodoColaPrioridad<T> p = sigNodo;
-		sigNodo = null;
+		NodoBin<T> p = hijoDer;
+		hijoDer=null;
+		return p;
+	}
+	 /*
+	  * da el hijo de la izquierda y lo borra
+	  */
+	public NodoBin<T> darIzq( )
+	{
+		NodoBin<T> p = hijoIzq;
+		hijoIzq=null;
 		return p;
 	}
 
 	/**
-	 * Inserta el nodo especificado después del nodo actual. <br>
-	 * <b>post: </b> Se insertó el nodo después del nodo actual lo que implica que sigNodo=nodo.<br>
-	 * @param nodo El nodo a ser insertado<br>
-	 * @return Nodo que se insertó después del nodo actual<br>
-	 */
-	public NodoColaPrioridad<T> insertarDespues( NodoColaPrioridad<T> nodo )
-	{
-		sigNodo = nodo;
-		return nodo;
-	}
-
-	/**
-	 * Retorna el siguiente nodo. <br>
+	 * Retorna el siguiente nodo. por la derecha <br>
 	 * <b>post: </b> Se retornó el siguiente nodo.<br>
 	 * @return El nodo siguiente<br>
 	 */
-	public NodoColaPrioridad<T> darSiguiente( )
+	public NodoBin<T> darHijoDer( )
 	{
-		return sigNodo;
+		return hijoDer;
+	}
+	
+	/**
+	 * Retorna el siguiente nodo. por la izquierda <br>
+	 * <b>post: </b> Se retornó el siguiente nodo.<br>
+	 * @return El nodo siguiente<br>
+	 */
+	public NodoBin<T> darHijoIzq( )
+	{
+		return hijoIzq;
 	}
 
 	/**
@@ -110,4 +112,7 @@ public class NodoColaPrioridad<T extends Comparable<? super T>> implements Seria
 	{
 		return "(" + elemento.toString( ) + ")";
 	}
+	
+	
 }
+

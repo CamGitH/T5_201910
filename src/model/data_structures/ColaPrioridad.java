@@ -1,13 +1,13 @@
 package model.data_structures;
 import java.io.Serializable;
-
+//Universidad de los Andes. Cupi2 Estructuras de datos. Cola Prioridad.
 /**
  * Implementación de una cola de prioridad
  * @param <T> Tipo de datos que contiene cada nodo de la cola.
  * @param <E> Tipo de datos que se utilizara para darle la prioridad a los objetos de la cola. Los objetos de tipo T deben implentar la interface <b>Comparable</b> para poder
  *        realizar la inserción en la cola de forma correcta
  */
-public class ColaPrioridad<T extends Comparable<? super T>, E> implements Serializable
+public class ColaPrioridad<T extends Comparable<? super T>> implements Serializable
 {
 	// -----------------------------------------------------------------
 	// Constantes
@@ -24,12 +24,12 @@ public class ColaPrioridad<T extends Comparable<? super T>, E> implements Serial
 	/**
 	 * Primer elemento de la cola encadenada
 	 */
-	protected NodoColaPrioridad<T, E> primero;
+	protected NodoColaPrioridad<T> primero;
 
 	/**
 	 * Ultimo elemento de la cola encadenada
 	 */
-	protected NodoColaPrioridad<T, E> ultimo;
+	protected NodoColaPrioridad<T> ultimo;
 
 	/**
 	 * Número de elementos de la cola
@@ -69,13 +69,13 @@ public class ColaPrioridad<T extends Comparable<? super T>, E> implements Serial
 	 * @return El primer elemento de la cola. Diferente de null<br>
 	 * @throws ColaVaciaException Si la cola no tiene elementos<br>
 	 */
-	public E tomarElemento( ) throws Exception
+	public T tomarElemento( ) throws Exception
 	{
 		if( primero == null )
 			throw new Exception( "No hay elementos en la cola" );
 		else
 		{
-			NodoColaPrioridad<T, E> p = primero;
+			NodoColaPrioridad<T> p = primero;
 			primero = primero.desconectarPrimero( );
 			if( primero == null )
 				ultimo = null;
@@ -91,16 +91,16 @@ public class ColaPrioridad<T extends Comparable<? super T>, E> implements Serial
 	 * @param prioridad Elemento con el que se va a tomar la prioridad de la cola
 	 * @param elem El elemento a ser insertado
 	 */
-	public void insertar( T prioridad, E elem )
+	public void insertar(T elem )
 	{
-		NodoColaPrioridad<T, E> nodo = new NodoColaPrioridad<T, E>( prioridad, elem );
+		NodoColaPrioridad<T> nodo = new NodoColaPrioridad<T>( elem );
 		if( primero == null )
 		{
 			primero = nodo;
 			ultimo = nodo;
 		}
 		// Verifica si tiene mayor prioridad que el primer elemento de la cola
-		else if( primero.darPrioridad( ).compareTo( prioridad ) < 0 )
+		else if( primero.darElemento().compareTo(elem) < 0 )
 		{
 			nodo.insertarDespues( primero );
 			primero = nodo;
@@ -109,9 +109,9 @@ public class ColaPrioridad<T extends Comparable<? super T>, E> implements Serial
 		{
 			// Recorre la cola hasta encontrar un nodo de menor prioridad
 			boolean inserto = false;
-			for( NodoColaPrioridad<T, E> p = primero; !inserto && p.darSiguiente( ) != null; p = p.darSiguiente( ) )
+			for( NodoColaPrioridad<T> p = primero; !inserto && p.darSiguiente( ) != null; p = p.darSiguiente( ) )
 			{
-				if( p.darSiguiente( ).darPrioridad( ).compareTo( prioridad ) < 0 )
+				if( p.darSiguiente( ).darElemento().compareTo( elem ) < 0 )
 				{
 					nodo.insertarDespues( p.darSiguiente( ) );
 					p.insertarDespues( nodo );
@@ -132,7 +132,7 @@ public class ColaPrioridad<T extends Comparable<? super T>, E> implements Serial
 	 * <b>post: </b> Se retornó el primer nodo de la cola.
 	 * @return El primer nodo de la cola
 	 */
-	public NodoColaPrioridad<T, E> darPrimero( )
+	public NodoColaPrioridad<T> darPrimero( )
 	{
 		return primero;
 	}
@@ -142,7 +142,7 @@ public class ColaPrioridad<T extends Comparable<? super T>, E> implements Serial
 	 * <b>post: </b> Se retornó el último nodo de la cola.<br>
 	 * @return El último nodo de la cola<br>
 	 */
-	public NodoColaPrioridad<T, E> darUltimo( )
+	public NodoColaPrioridad<T> darUltimo( )
 	{
 		return ultimo;
 	}
@@ -167,7 +167,7 @@ public class ColaPrioridad<T extends Comparable<? super T>, E> implements Serial
 	public String toString( )
 	{
 		String resp = "[" + numElems + "]:";
-		for( NodoColaPrioridad<T, E> p = primero; p != null; p = p.darSiguiente( ) )
+		for( NodoColaPrioridad<T> p = primero; p != null; p = p.darSiguiente( ) )
 		{
 			resp += "->" + p.toString( );
 		}

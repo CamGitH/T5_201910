@@ -7,7 +7,7 @@ public interface IColaPrioridad<T> {
 	
 	int darNumElementos( );
 	
-	T tomarElemento( );
+	T tomarElemento( ) throws Exception;
 	
 	void agregar( T elemento );
 	

@@ -2,13 +2,12 @@ package model.data_structures;
 
 /**
  * @param <T>
- * @param <E>
  */
-public interface IColaPrioridad<T extends Comparable<? super T>, E> {
+public interface IColaPrioridad<T> {
 	
 	int darNumElementos( );
 	
-	E tomarElemento( );
+	T tomarElemento( );
 	
 	void agregar( T elemento );
 	

@@ -1,4 +1,4 @@
-package colas;
+package model.data_structures;
 
 import java.util.Iterator;
 
@@ -7,15 +7,15 @@ import java.util.Iterator;
  */
 public class LinkedList<T> {
 
-	private Nodo<T> primero;
-	private Nodo<T> ultimo;
+	private NodoLinkedList<T> primero;
+	private NodoLinkedList<T> ultimo;
 	private int tamano=0;
 
-	public Nodo<T> darPrimero(){
+	public NodoLinkedList<T> darPrimero(){
 		return primero;
 	}
 
-	public Nodo<T> darUltimo(){
+	public NodoLinkedList<T> darUltimo(){
 		return ultimo;
 	}
 
@@ -27,7 +27,7 @@ public class LinkedList<T> {
 	}
 
 	public void agregarIni(T nuevo){
-		Nodo<T> nodo = new Nodo<T>(nuevo);
+		NodoLinkedList<T> nodo = new NodoLinkedList<T>(nuevo);
 		if(tamano==0){
 			primero= nodo;
 			ultimo= nodo;
@@ -42,7 +42,7 @@ public class LinkedList<T> {
 	}
 
 	public void agregarFinal(T nuevo){
-		Nodo<T> nodo = new Nodo<T>(nuevo);
+		NodoLinkedList<T> nodo = new NodoLinkedList<T>(nuevo);
 		if(tamano==0){
 
 			primero= nodo;
@@ -86,7 +86,7 @@ public class LinkedList<T> {
 			ultimo=null;
 		}
 		else{
-			((Nodo<T>) primero).darSiguiente().cambiarAnterior(null);
+			((NodoLinkedList<T>) primero).darSiguiente().cambiarAnterior(null);
 			primero=primero.darSiguiente();
 			tamano --;
 		}

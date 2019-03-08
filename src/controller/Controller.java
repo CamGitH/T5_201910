@@ -11,7 +11,9 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
 import model.data_structures.ColaPrioridad;
+import model.data_structures.LinkedList;
 import model.data_structures.NodoColaPrioridad;
+import model.data_structures.NodoLinkedList;
 import model.violations.VOMovingViolations;
 
 import view.View;
@@ -34,7 +36,7 @@ public class Controller {
 		view = new View();
 
 		//TODO inicializar las estructuras de datos para la carga de informacion de archivos
-		listaEncadenda = new ColaPrioridad<String, VOMovingViolations>();
+		listaEncadenda = new LinkedList<VOMovingViolations>();
 	}
 	
 	public Comparable<VOMovingViolations> [ ] generarMuestra( int n )
@@ -49,7 +51,7 @@ public class Controller {
 		}
 
 		muestra = new Comparable[ n ];
-		Nodo<VOMovingViolations> objeto = listaEncadenda.darPrimero();;
+		NodoLinkedList<VOMovingViolations> objeto = listaEncadenda.darPrimero();;
 		for(int i = 0; i<n;i++){
 			Random random = new Random();
 			int indice = random.nextInt(1000);
@@ -122,7 +124,7 @@ public class Controller {
 		for(int i = 0;i<list.size();i++){
 
 			
-			listaEncadenda.insertar(new VOMovingViolations(
+			listaEncadenda.agregarIni(new VOMovingViolations(
 					list.get(i)[0], 
 					list.get(i)[1], 
 					list.get(i)[2], 

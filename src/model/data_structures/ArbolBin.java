@@ -20,7 +20,7 @@ public class ArbolBin<T> {
 		if(tamano==0){
 			primero= nodo;
 		}
-		else if(nuevo.darElemento){
+		else if(nodo.darElemento().compareTo){
 			nodo.cambiarSiguiente(primero);
 			primero=nodo;
 		}

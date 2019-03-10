@@ -2,7 +2,7 @@ package model.data_structures;
 
 import java.io.Serializable;
 
-public class NodoBin <T> {
+public class NodoBin <T extends Comparable<T>> {
 	// -----------------------------------------------------------------
 	// Constantes
 	// -----------------------------------------------------------------

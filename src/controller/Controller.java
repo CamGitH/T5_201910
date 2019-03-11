@@ -2,6 +2,7 @@ package controller;
 
 import java.io.FileReader;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,10 +11,14 @@ import java.util.Scanner;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
-import model.data_structures.ColaPrioridad;
+
 import model.data_structures.LinkedList;
-import model.data_structures.NodoColaPrioridad;
+import model.data_structures.MaxColaPrioridad;
+import model.data_structures.MaxHeapCP;
+
 import model.data_structures.NodoLinkedList;
+import model.sort.Sort;
+import model.violations.LocationVO;
 import model.violations.VOMovingViolations;
 
 import view.View;
@@ -23,6 +28,10 @@ public class Controller {
 	private View view;
 
 	private LinkedList<VOMovingViolations> listaEncadenda;
+	
+	private MaxColaPrioridad<LocationVO> colaQuaue;
+	
+	private MaxHeapCP<LocationVO> colaHeap;
 
 	// TODO Definir las estructuras de datos para cargar las infracciones del periodo definido
 
@@ -31,6 +40,8 @@ public class Controller {
 
 	// Copia de la muestra de datos a ordenar 
 	Comparable<VOMovingViolations> [ ] muestraCopia;
+	
+	Comparable<VOMovingViolations> [ ] comparables;
 
 	public Controller() {
 		view = new View();
@@ -115,6 +126,40 @@ public class Controller {
 
 		}
 
+		Sort.ordenarShellSort(comparables, new VOMovingViolations.AddressID());
+		
+		NodoLinkedList<VOMovingViolations> nodo = listaEncadenda.darPrimero();
+		
+		String address = "";
+		int numberOfRegisters = 0;
+		String location = "";
+		
+		colaHeap = new MaxHeapCP<LocationVO>();
+		colaQuaue = new MaxColaPrioridad<LocationVO>();
+		
+		while(nodo.darElemento()!=null){
+			
+			address = nodo.darElemento().getAddressID();
+			numberOfRegisters = 1;
+			location = nodo.darElemento().getLocation();
+			
+			while(nodo.darSiguiente()!=null && nodo.darSiguiente().darElemento().getAddressID().equals(address)){
+
+				numberOfRegisters++;
+				nodo=nodo.darSiguiente();
+			}
+			
+			LocationVO locationData = new LocationVO(Integer.parseInt(address),numberOfRegisters, location);
+		
+			colaHeap.agregar(locationData);
+			colaQuaue.agregar(locationData);
+			
+			nodo = nodo.darSiguiente();
+			
+			
+			
+		}
+		
 		return listaEncadenda.getSize();
 	}
 
@@ -144,10 +189,28 @@ public class Controller {
 					list.get(i)[16]));
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public void generarComparables(){
+		comparables = new Comparable[listaEncadenda.getSize()];
+		NodoLinkedList<VOMovingViolations> objeto = listaEncadenda.darPrimero();;
+
+		int i=0;
+		while(objeto.darElemento()!=null){
+
+			comparables[i] = objeto.darElemento();
+			i++;
+			objeto=objeto.darSiguiente();
+		}
+	}
 
 
 	public void run() {
 
+		long startTime;
+		long endTime;
+		long duration;
+		
 		int nDatos = 0;
 		int nMuestra = 0;
 

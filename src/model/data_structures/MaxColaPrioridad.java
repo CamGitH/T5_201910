@@ -1,5 +1,10 @@
 package model.data_structures;
-
+/**
+ * Clase que representa la cola de prioridad de tipo Queue.
+ * @author Tomas
+ *Basado en la cola de: Universidad de los Andes. Cupi2 Estructuras de datos. Cola Prioridad.
+ * @param <T>
+ */
 public class MaxColaPrioridad <T  extends  Comparable<T>> implements IColaPrioridad<T> {
 
 	protected NodoColaPrioridad<T> primero;

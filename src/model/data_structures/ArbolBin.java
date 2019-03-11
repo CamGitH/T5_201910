@@ -18,6 +18,14 @@ public class ArbolBin<T extends Comparable <T>> {
 	/*
 	 * lo pene de primero y lo intercambia con el mas alto
 	 */
+	private void swim(T k)
+	{
+	while (k > 1 && less(k/2, k))
+	{
+	exch(k/2, k);
+	k = k/2;
+	}
+	}
 	public void Sink(T nuevo){
 		NodoBin<T> nodo = new NodoBin<T>(nuevo);
 		if(tamano==0){

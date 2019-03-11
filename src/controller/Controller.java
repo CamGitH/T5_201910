@@ -20,7 +20,6 @@ import model.data_structures.NodoLinkedList;
 import model.sort.Sort;
 import model.violations.LocationVO;
 import model.violations.VOMovingViolations;
-
 import view.View;
 
 public class Controller {
@@ -28,10 +27,15 @@ public class Controller {
 	private View view;
 
 	private LinkedList<VOMovingViolations> listaEncadenda;
-	
+
+	private LinkedList<VOMovingViolations> listaMuestra;
+
 	private MaxColaPrioridad<LocationVO> colaQuaue;
-	
+
 	private MaxHeapCP<LocationVO> colaHeap;
+
+	private ArrayList<LocationVO> datosLocationVO;
+
 
 	// TODO Definir las estructuras de datos para cargar las infracciones del periodo definido
 
@@ -40,7 +44,7 @@ public class Controller {
 
 	// Copia de la muestra de datos a ordenar 
 	Comparable<VOMovingViolations> [ ] muestraCopia;
-	
+
 	Comparable<VOMovingViolations> [ ] comparables;
 
 	public Controller() {
@@ -49,7 +53,8 @@ public class Controller {
 		//TODO inicializar las estructuras de datos para la carga de informacion de archivos
 		listaEncadenda = new LinkedList<VOMovingViolations>();
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public Comparable<VOMovingViolations> [ ] generarMuestra( int n )
 	{
 		if(n > 240000){
@@ -75,10 +80,19 @@ public class Controller {
 				indice--;
 			}
 			muestra[i] = objeto.darElemento();
-			
+			listaMuestra.agregarIni(objeto.darElemento());
+
 
 		}
 		return muestra;
+	}
+	@SuppressWarnings("unchecked")
+	public Comparable<VOMovingViolations> [ ] obtenerCopia( Comparable<VOMovingViolations> [ ] muestra)
+	{
+		Comparable<VOMovingViolations> [ ] copia = new Comparable[ muestra.length ]; 
+		for ( int i = 0; i < muestra.length; i++)
+		{    copia[i] = muestra[i];    }
+		return copia;
 	}
 
 	/**
@@ -112,7 +126,7 @@ public class Controller {
 			list = reader.readAll();
 			readFiles(list);
 			list.clear();
-			
+
 			reader=new CSVReaderBuilder(new FileReader("./data/Moving_Violations_Issued_in_April_2018.csv")).withSkipLines(1).build();
 
 			list = reader.readAll();
@@ -126,41 +140,65 @@ public class Controller {
 
 		}
 
-		Sort.ordenarShellSort(comparables, new VOMovingViolations.AddressID());
-		
-		NodoLinkedList<VOMovingViolations> nodo = listaEncadenda.darPrimero();
-		
+
+		return listaEncadenda.getSize();
+	}
+
+	public void cargarDatosLocationVO(){
+
+		Sort.ordenarShellSort(muestra, new VOMovingViolations.AddressID());
+
+		NodoLinkedList<VOMovingViolations> nodo = listaMuestra.darPrimero();
+
 		String address = "";
 		int numberOfRegisters = 0;
 		String location = "";
-		
+
 		colaHeap = new MaxHeapCP<LocationVO>();
 		colaQuaue = new MaxColaPrioridad<LocationVO>();
-		
+
 		while(nodo.darElemento()!=null){
-			
+
 			address = nodo.darElemento().getAddressID();
 			numberOfRegisters = 1;
 			location = nodo.darElemento().getLocation();
-			
+
 			while(nodo.darSiguiente()!=null && nodo.darSiguiente().darElemento().getAddressID().equals(address)){
 
 				numberOfRegisters++;
 				nodo=nodo.darSiguiente();
 			}
-			
+
 			LocationVO locationData = new LocationVO(Integer.parseInt(address),numberOfRegisters, location);
-		
-			colaHeap.agregar(locationData);
-			colaQuaue.agregar(locationData);
-			
+
+			datosLocationVO.add(locationData);
+
 			nodo = nodo.darSiguiente();
-			
-			
-			
+
+
 		}
-		
-		return listaEncadenda.getSize();
+	}
+
+	public void agregarMaxHeap(){
+
+		cargarDatosLocationVO();
+
+		for(int i = 0; i<datosLocationVO.size();i++){
+
+			colaHeap.agregar(datosLocationVO.get(i));
+		}
+
+	}
+
+	public void agregarMaxColaPrioridad(){
+
+		cargarDatosLocationVO();
+
+		for(int i = 0; i<datosLocationVO.size();i++){
+
+			colaQuaue.agregar(datosLocationVO.get(i));
+		}
+
 	}
 
 	public void readFiles(List<String[]> list){
@@ -168,7 +206,7 @@ public class Controller {
 
 		for(int i = 0;i<list.size();i++){
 
-			
+
 			listaEncadenda.agregarIni(new VOMovingViolations(
 					list.get(i)[0], 
 					list.get(i)[1], 
@@ -189,7 +227,7 @@ public class Controller {
 					list.get(i)[16]));
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void generarComparables(){
 		comparables = new Comparable[listaEncadenda.getSize()];
@@ -210,7 +248,7 @@ public class Controller {
 		long startTime;
 		long endTime;
 		long duration;
-		
+
 		int nDatos = 0;
 		int nMuestra = 0;
 
@@ -226,7 +264,7 @@ public class Controller {
 			switch(option)
 			{
 			case 1:
-			
+
 				nDatos = this.loadMovingViolations();
 				view.printMensage("Numero infracciones cargadas:" + nDatos);
 				break;
@@ -237,7 +275,7 @@ public class Controller {
 				muestra = this.generarMuestra( nMuestra );
 				view.printMensage("Muestra generada");
 				break;
-				
+
 
 			case 3:
 				if ( nMuestra > 0 && muestra != null && muestra.length == nMuestra )
@@ -249,8 +287,26 @@ public class Controller {
 					view.printMensage("Muestra invalida");
 				}
 				break;
-				
-			case 4:	
+
+			case 4:
+
+				startTime = System.currentTimeMillis();
+				this.agregarMaxColaPrioridad();
+				endTime = System.currentTimeMillis();
+				duration = endTime - startTime;
+				view.printMensage("Tiempo de la operacion: " + duration + " milisegundos");
+				break;
+
+			case 5:
+
+				startTime = System.currentTimeMillis();
+				this.agregarMaxHeap();
+				endTime = System.currentTimeMillis();
+				duration = endTime - startTime;
+				view.printMensage("Tiempo de la operacion: " + duration + " milisegundos");
+				break;
+
+			case 6:	
 				fin=true;
 				sc.close();
 				break;

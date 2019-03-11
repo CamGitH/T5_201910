@@ -12,9 +12,9 @@ public class View {
 		System.out.println("1. Cargar datos");
 		System.out.println("2. Obtener una muestra de datos a ordenar");
 		System.out.println("3. Mostrar la muestra de datos a ordenar");
-		System.out.println("4. ");
-		System.out.println("5. ");
-		System.out.println("6. ");
+		System.out.println("4. Cargar datos a la MaxColaPrioridad");
+		System.out.println("5. CargarDatos a la MaxHeapCP");
+		System.out.println("6.  Dar N vías que tienen la  mayor  cantidad  de  infracciones");
 		System.out.println("7. ");
 		System.out.println("8. ");
 		System.out.println("9. ");

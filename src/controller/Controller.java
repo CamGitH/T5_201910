@@ -1,8 +1,8 @@
 package controller;
 
 import java.io.FileReader;
-
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -241,6 +241,12 @@ public class Controller {
 			objeto=objeto.darSiguiente();
 		}
 	}
+	public void  crearMaxColaP  (LocalDateTime  fInicial,  LocalDateTime fFinal){
+		
+	}
+	public void  crearMaxHeapCP  (LocalDateTime  fInicial,  LocalDateTime fFinal){
+		
+	}
 
 
 	public void run() {
@@ -306,12 +312,32 @@ public class Controller {
 				view.printMensage("Tiempo de la operacion: " + duration + " milisegundos");
 				break;
 
-			case 6:	
+			case 6:
+				String fecha1 = sc.nextLine();
+				String fecha2 = sc.nextLine();
+				startTime = System.currentTimeMillis();
+				LocalDateTime tiempo = convertirFecha_Hora_LDT(fecha1);
+				LocalDateTime tiempo2 = convertirFecha_Hora_LDT(fecha2);
+				this.crearMaxColaP(tiempo, tiempo2);
+				endTime = System.currentTimeMillis();
+				long tiempoQueue = endTime - startTime;
+				startTime = System.currentTimeMillis();
+				this.crearMaxHeapCP(tiempo, tiempo2);
+				endTime = System.currentTimeMillis();
+				long tiempoHeap = endTime - startTime;
+				view.printMensage("El tiempo de la MaxColaP es: " + tiempoQueue + " milisegundos");
+				view.printMensage("El tiempo de la MaxColaP es: " + tiempoHeap + " milisegundos");
+				
+			case 7:	
 				fin=true;
 				sc.close();
 				break;
 			}
 		}
+	}
+	private static LocalDateTime convertirFecha_Hora_LDT(String fechaHora)
+	{
+		return LocalDateTime.parse(fechaHora, DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"));
 	}
 
 }

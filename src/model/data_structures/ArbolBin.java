@@ -1,28 +1,51 @@
 package model.data_structures;
 
-public class ArbolBin<T> {
+public class ArbolBin<T extends Comparable <T>> {
 	private NodoBin<T> primero;
 	private int tamano;
-	
+
 	public NodoBin<T> darPrimero(){
 		return primero;
 	}
 
-	
+
 
 	public ArbolBin(){
 		primero = null;
 		tamano =0;
 	}
 
+	/*
+	 * lo pene de primero y lo intercambia con el mas alto
+	 */
+	private void swim(T k)
+	{
+	while (k > 1 && less(k/2, k))
+	{
+	exch(k/2, k);
+	k = k/2;
+	}
+	}
 	public void Sink(T nuevo){
 		NodoBin<T> nodo = new NodoBin<T>(nuevo);
 		if(tamano==0){
 			primero= nodo;
 		}
-		else if(nodo.darElemento().compareTo){
-			nodo.cambiarSiguiente(primero);
+		else {
 			primero=nodo;
+			nodo= primero;
+			if(nodo.darHijoIzq().darElemento().compareTo(nodo.darHijoIzq().darElemento())==-1){
+				if(nodo.darElemento().compareTo(nodo.darHijoDer().darElemento())==-1){
+					NodoBin<T> n = nodo.darHijoDer();
+					
+				}
+			}
+			else{
+				if(nodo.darElemento().compareTo(nodo.darHijoDer().darElemento())==-1){
+
+				}
+
+			}
 		}
 	}
 
@@ -67,7 +90,7 @@ public class ArbolBin<T> {
 		else{
 			((NodoBin<T>) primero).darSiguiente().cambiarAnterior(null);
 			primero=primero.darSiguiente();
-		
+
 		}
 	}
 }

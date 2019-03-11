@@ -32,6 +32,8 @@ public class NodoBin <T extends Comparable<T>> {
 	 */
 	private NodoBin<T> hijoDer;
 
+	private NodoBin<T> padre;
+
 	// -----------------------------------------------------------------
 	// Constructores
 	// -----------------------------------------------------------------
@@ -47,6 +49,7 @@ public class NodoBin <T extends Comparable<T>> {
 		elemento = pElemento;
 		hijoIzq = null;
 		hijoDer = null;
+		padre = null;
 	}
 
 	// -----------------------------------------------------------------
@@ -100,6 +103,11 @@ public class NodoBin <T extends Comparable<T>> {
 	public NodoBin<T> darHijoIzq( )
 	{
 		return hijoIzq;
+	}
+	
+	public NodoBin<T> darPadre( )
+	{
+		return padre;
 	}
 
 	/**

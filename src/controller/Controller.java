@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.FileReader;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -241,11 +242,103 @@ public class Controller {
 			objeto=objeto.darSiguiente();
 		}
 	}
-	public void  crearMaxColaP  (LocalDateTime  fInicial,  LocalDateTime fFinal){
+	public MaxColaPrioridad  <LocationVO>  crearMaxColaP  (LocalDateTime  fInicial,  LocalDateTime fFinal){
+
+			MaxColaPrioridad<LocationVO> cola = new MaxColaPrioridad<>();
+			generarComparables();
+			
+			Sort.ordenarShellSort(comparables, new VOMovingViolations.AddressID());
+			
+			NodoLinkedList<VOMovingViolations> nodo = listaMuestra.darPrimero();
+
+			String address = "";
+			int numberOfRegisters = 0;
+			String location = "";
+			
+			while(nodo.darElemento()!=null){
+
+				address = nodo.darElemento().getAddressID();
+				numberOfRegisters = 1;
+				location = nodo.darElemento().getLocation();
+				
+				
+
+				while(nodo.darSiguiente()!=null && nodo.darSiguiente().darElemento().getAddressID().equals(address)){
+
+					VOMovingViolations violacion1 = nodo.darSiguiente().darElemento();
+
+					LocalDateTime fecha1 = convertirFecha_Hora_LDT(violacion1.getTicketIssueDate());
+
+					if(fecha1.isAfter(fInicial) && fecha1.isBefore(fFinal) ){
+						
+						numberOfRegisters++;
+					}
+					nodo=nodo.darSiguiente();
+				}
+
+				LocationVO locationData = new LocationVO(Integer.parseInt(address),numberOfRegisters, location);
+
+				cola.agregar(locationData);
+
+				nodo = nodo.darSiguiente();
+
+
+			}
+			
+			
+			
+			return cola;
+
+
+		}
+	
+	public MaxHeapCP <LocationVO>  crearMaxHeapCP  (LocalDateTime  fInicial,  LocalDateTime fFinal){
 		
-	}
-	public void  crearMaxHeapCP  (LocalDateTime  fInicial,  LocalDateTime fFinal){
+		MaxHeapCP<LocationVO> cola = new MaxHeapCP<LocationVO>();
+		generarComparables();
 		
+		Sort.ordenarShellSort(comparables, new VOMovingViolations.AddressID());
+		
+		NodoLinkedList<VOMovingViolations> nodo = listaMuestra.darPrimero();
+
+		String address = "";
+		int numberOfRegisters = 0;
+		String location = "";
+		
+		while(nodo.darElemento()!=null){
+
+			address = nodo.darElemento().getAddressID();
+			numberOfRegisters = 1;
+			location = nodo.darElemento().getLocation();
+			
+			
+
+			while(nodo.darSiguiente()!=null && nodo.darSiguiente().darElemento().getAddressID().equals(address)){
+
+				VOMovingViolations violacion1 = nodo.darSiguiente().darElemento();
+
+				LocalDateTime fecha1 = convertirFecha_Hora_LDT(violacion1.getTicketIssueDate());
+
+				if(fecha1.isAfter(fInicial) && fecha1.isBefore(fFinal) ){
+					
+					numberOfRegisters++;
+				}
+				nodo=nodo.darSiguiente();
+			}
+
+			LocationVO locationData = new LocationVO(Integer.parseInt(address),numberOfRegisters, location);
+
+			cola.agregar(locationData);
+
+			nodo = nodo.darSiguiente();
+
+
+		}
+		
+		
+		
+		return cola;
+
 	}
 
 
@@ -338,6 +431,10 @@ public class Controller {
 	private static LocalDateTime convertirFecha_Hora_LDT(String fechaHora)
 	{
 		return LocalDateTime.parse(fechaHora, DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"));
+	}
+	private static LocalDate convertirFecha(String fecha)
+	{
+		return LocalDate.parse(fecha, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 	}
 
 }
